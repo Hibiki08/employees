@@ -2,11 +2,16 @@ version: "3"
 
 services:
     db:
-        image: mysql:8.0.23
-        platform: linux/x86_64
+#            dockerfile: ./db/Dockerfile
+#        image: mysql:8.0.23
+#        platform: linux/x86_64
         command: --default-authentication-plugin=mysql_native_password
         volumes:
             - "db_app:/var/lib/mysql"
+#            - "./db-dumps:/tmp/db-dumps"
+#            - "./dev-ops:/tmp/dev-ops"
+        build:
+            context: ./db
         environment:
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
             MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -22,16 +27,20 @@ services:
             args:
                 TIMEZONE: ${TIMEZONE}
         volumes:
-            - symfony_dockerized_app_sync:/var/www/symfony/
-            - "../composer.json:/var/www/symfony/composer.json"
-            - "../composer.lock:/var/www/symfony/composer.lock"
+            - "../symfony:/var/www/symfony/"
+#            - "../Makefile:/var/www/html/Makefile"
+#            - "../docker/db-dumps:/var/www/html/db-dumps/"
+#            - "../docker/dev-ops:/var/www/html/dev-ops/"
         networks:
             - symfony
     nginx:
         build:
             context: ./nginx
         volumes:
-            - symfony_dockerized_app_sync:/var/www/symfony/
+            - "../symfony:/var/www/symfony/"
+#            - "../Makefile:/var/www/html/Makefile"
+#            - "../docker/db-dumps:/var/www/html/db-dumps"
+#            - "../docker/dev-ops:/var/www/html/dev-ops"
         ports:
             - 80:80
         networks:
@@ -40,8 +49,8 @@ services:
             - .env.nginx.local
 
 volumes:
-    symfony_dockerized_app_sync:
-        external: true
+#    symfony_dockerized_app_sync:
+#        external: true
     db_app:
 
 networks:
