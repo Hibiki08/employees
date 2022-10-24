@@ -2,9 +2,14 @@ create table if not exists user
 (
 	id bigint auto_increment comment 'ID сотрудника'
 		primary key,
-	name varchar(255) not null comment 'Имя сотрудника'
+	name varchar(255) not null comment 'Имя сотрудника',
+    unique_key int not null comment 'Уникальный ключ',
+    parent_key int null
+
 )
 comment 'Сотрудники';
+create unique index user_unique_key_uindex
+    on user (unique_key);
 
 create table if not exists user_tree
 (

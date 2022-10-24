@@ -1,0 +1,29 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{#    <link href="{{ absolute_url(asset('dist/css/adminlte.min.css')) }}" rel="stylesheet">#}
+{% endblock %}
+
+{% block javascripts %}
+{#    <script src="{{ asset('/dist/js/adminlte.min.js') }}"></script>#}
+{% endblock %}
+
+{% block body %}
+    {% for label, messages in app.flashes(['warning', 'error', 'success']) %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    <h1>Сотрудники</h1>
+    <p>Импортировать сотрудников:</p>
+    <p>
+        {{ form_start(form, {'action': path('app_main_index')}) }}
+        {{ form_row(form.file) }}
+        {{ form_end(form) }}
+    </p>
+    <h2>Список сотрудников</h2>
+    <p></p>
+{% endblock %}
